@@ -6,16 +6,23 @@ The tool is designed specifically for me personally, but it's also possible to r
 
 ## Prerequisites
 - The app uses environment variables to get your [Canvas Access Key](https://community.canvaslms.com/t5/Admin-Guide/How-do-I-manage-API-access-tokens-as-an-admin/ta-p/89)
-- Store the Canvas Access Token in the environment variable **CANVAS_ACCESS_TOKEN** (for example add
-`export CANVAS_ACCESS_TOKEN="key-here"`
-into your .bashrc file)
-- Store the Base Canvas URL in the environment variable **CANVAS_URL** (for example add
-`export CANVAS_URL="https://csuchico.canvas.edu"`
+- Store the Canvas Access Token in the environment variable **CANVAS_ACCESS_TOKEN** (for example add this to your .bashrc file):
+```bash
+export CANVAS_ACCESS_TOKEN="key-here"
+```
+- Store the Base Canvas URL in the environment variable **CANVAS_URL** (for example add this to your .bashrc file):
+```bash
+export CANVAS_URL="https://csuchico.canvas.edu"
+``````
 
 ## Controls
-TODO! List controls
-Just use j, k, l, h, o
-<!-- I based the controls on vim bindings as a neovim user. Here are the current supported keybinds: -->
+I based the controls on Vim bindings as a Neovim user. Here are the current supported keybinds:
+- `j`: Move down
+- `k`: Move up
+- `h`: Go to previous day
+- `l`: Go to next day
+- `o`: Open the url in your browser
+- `q`: Quit the app
 
 ## Future Wanted Features
 - Make browser open feature more extensible
