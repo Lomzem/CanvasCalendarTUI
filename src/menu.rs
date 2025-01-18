@@ -5,8 +5,8 @@ use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind};
 use ratatui::{
     buffer::Buffer,
     layout::{Constraint, Layout, Rect},
-    style::{Color, Modifier, Style, Stylize},
-    text::Line,
+    style::{Color, Style, Stylize},
+    text::{Line, Span},
     widgets::{Block, HighlightSpacing, List, ListState, Paragraph, StatefulWidget, Widget},
     DefaultTerminal,
 };
@@ -95,13 +95,19 @@ impl Widget for &mut Menu {
         let title = Line::from(" Canvas Calendar TUI ".bold());
         let block = Block::bordered().title(title.centered());
 
-        let [current_date, list] =
-            Layout::vertical([Constraint::Length(1), Constraint::Fill(1)]).areas(block.inner(area));
+        let [current_date_space, list_space, instruction_space] = Layout::vertical([
+            Constraint::Length(1),
+            Constraint::Fill(1),
+            Constraint::Length(5),
+        ])
+        .areas(block.inner(area));
 
-        Paragraph::new(format!("Current Date: {}", self.current_date)).render(current_date, buf);
+        Paragraph::new(format!("Current Date: {}", self.current_date))
+            .render(current_date_space, buf);
 
         block.render(area, buf);
-        self.render_list(list, buf);
+        self.render_list(list_space, buf);
+        self.render_instructions(instruction_space, buf)
     }
 }
 
@@ -147,6 +153,36 @@ impl Menu {
                 .unwrap()
                 .state,
         );
+    }
+
+    fn render_instructions(&mut self, area: Rect, buf: &mut Buffer) {
+        let paragraph = Paragraph::new(vec![
+            Line::from(vec![
+                Span::styled("<h>", Style::new().blue()),
+                Span::raw(" Back"),
+            ]),
+            Line::from(vec![
+                Span::styled("<l>", Style::new().blue()),
+                Span::raw(" Forward"),
+            ]),
+            Line::from(vec![
+                Span::styled("<j>", Style::new().blue()),
+                Span::raw(" Down"),
+            ]),
+            Line::from(vec![
+                Span::styled("<k>", Style::new().blue()),
+                Span::raw(" Up"),
+            ]),
+            Line::from(vec![
+                Span::styled("<o>", Style::new().blue()),
+                Span::raw(" Open URL"),
+            ]),
+            Line::from(vec![
+                Span::styled("<q>", Style::new().blue()),
+                Span::raw(" Quit"),
+            ]),
+        ]);
+        paragraph.render(area, buf);
     }
 }
 
