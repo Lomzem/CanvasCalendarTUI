@@ -50,8 +50,6 @@ async fn get_planner() -> Result<Vec<Planner>, reqwest::Error> {
     )
     .expect("Unable to add \"access_token\" to url");
 
-    dbg!(&full_url.as_str());
-
     let planners: Vec<Planner> = reqwest::get(full_url).await?.json().await?;
 
     Ok(planners)
