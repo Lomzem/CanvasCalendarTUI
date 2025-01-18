@@ -26,3 +26,4 @@ I based the controls on Vim bindings as a Neovim user. Here are the current supp
 
 ## Future Wanted Features
 - Make browser open feature more extensible
+- Different colors based on course or calendar event type
