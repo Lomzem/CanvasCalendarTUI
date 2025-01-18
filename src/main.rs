@@ -8,9 +8,9 @@ use std::error::Error;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let calendar = data_fetch::get_calendar().await?;
-    // // serde_json::to_writer_pretty(std::fs::File::create("planner.json")?, &calendar)?;
-    // // let calendar = serde_json::from_reader(std::fs::File::open("planner.json")?)?;
-    //
+    // serde_json::to_writer_pretty(std::fs::File::create("planner.json")?, &calendar)?;
+    // let calendar = serde_json::from_reader(std::fs::File::open("planner.json")?)?;
+
     // let planner = vec![
     //     types::Planner {
     //         course_id: 1,
@@ -35,15 +35,15 @@ async fn main() -> Result<(), Box<dyn Error>> {
     //         html_url: "https://canvas.example.com/courses/1/assignments/2".to_string(),
     //     },
     // ];
-    //
-    // let planners: BTreeMap<NaiveDate, PlannerList> = planner
+
+    // let planners: std::collections::BTreeMap<chrono::NaiveDate,types::PlannerList>  = planner
     //     .into_iter()
-    //     .fold(BTreeMap::new(), |mut acc, planner| {
+    //     .fold(std::collections::BTreeMap::new(), |mut acc, planner| {
     //         let date = planner.plannable_date.date_naive();
     //         acc.entry(date)
-    //             .or_insert_with(|| PlannerList {
+    //             .or_insert_with(|| types::PlannerList {
     //                 list: Vec::new(),
-    //                 state: ListState::default(),
+    //                 state: ratatui::widgets::ListState::default(),
     //             })
     //             .list
     //             .push(planner);

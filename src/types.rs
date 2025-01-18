@@ -32,8 +32,20 @@ pub struct Calendar {
     pub planners: BTreeMap<NaiveDate, PlannerList>,
 }
 
+impl Planner {
+    pub fn get_course_code(&self) -> String {
+        // get first two splits of course name
+        let course_name = self.course_name.split(' ').collect::<Vec<&str>>();
+        if course_name.len() > 1 {
+            return course_name[0..2].join(" ").to_string();
+        } else {
+            return "".to_string();
+        }
+    }
+}
+
 impl Display for &Planner {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{}", self.plannable.title)
+        write!(f, "{} - {}", self.get_course_code(), self.plannable.title)
     }
 }

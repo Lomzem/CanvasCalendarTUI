@@ -5,15 +5,19 @@ use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind};
 use ratatui::{
     buffer::Buffer,
     layout::{Constraint, Layout, Rect},
-    style::{palette::tailwind::SLATE, Modifier, Style, Stylize},
+    style::{Color, Modifier, Style, Stylize},
     text::Line,
     widgets::{Block, HighlightSpacing, List, ListState, Paragraph, StatefulWidget, Widget},
     DefaultTerminal,
 };
 
-use crate::{data_fetch::get_base_url, types::{Calendar, PlannerList}};
+use crate::{
+    data_fetch::get_base_url,
+    types::{Calendar, PlannerList},
+};
 
-const SELECTED_STYLE: Style = Style::new().bg(SLATE.c800).add_modifier(Modifier::BOLD);
+// just invert the bg and fg
+const SELECTED_STYLE: Style = Style::new().fg(Color::Black).bg(Color::White);
 
 #[derive(Debug)]
 pub struct Menu {
@@ -130,7 +134,6 @@ impl Menu {
 
         let list = List::new(items)
             .highlight_style(SELECTED_STYLE)
-            .highlight_symbol("> ")
             .highlight_spacing(HighlightSpacing::Always);
 
         StatefulWidget::render(
@@ -185,8 +188,13 @@ impl Menu {
 
     fn open_url(&self) {
         if let Some(planner_list) = self.calendar.planners.get(&self.current_date) {
-            if let Some(planner) = planner_list.list.get(planner_list.state.selected().unwrap()) {
-                let url = get_base_url().join(&planner.html_url).expect("Unable to join url");
+            if let Some(planner) = planner_list
+                .list
+                .get(planner_list.state.selected().unwrap())
+            {
+                let url = get_base_url()
+                    .join(&planner.html_url)
+                    .expect("Unable to join url");
                 webbrowser::open(&url.as_str()).expect("Unable to open url");
             }
         }
