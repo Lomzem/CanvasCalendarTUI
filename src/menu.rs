@@ -98,7 +98,7 @@ impl Widget for &mut Menu {
         let [current_date_space, list_space, instruction_space] = Layout::vertical([
             Constraint::Length(1),
             Constraint::Fill(1),
-            Constraint::Length(5),
+            Constraint::Length(6),
         ])
         .areas(block.inner(area));
 
