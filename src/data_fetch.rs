@@ -56,22 +56,20 @@ async fn get_planner() -> Result<Vec<Planner>, reqwest::Error> {
 }
 
 pub async fn get_calendar() -> Result<Calendar, reqwest::Error> {
-    let planner = get_planner().await?;
+    let planners = get_planner().await?;
+    let mut planner_map: BTreeMap<NaiveDate, PlannerList> = BTreeMap::new();
 
-    let planners: BTreeMap<NaiveDate, PlannerList> =
-        planner
-            .into_iter()
-            .fold(BTreeMap::new(), |mut acc, planner| {
-                let date = planner.plannable_date.date_naive();
-                acc.entry(date)
-                    .or_insert_with(|| PlannerList {
-                        list: Vec::new(),
-                        state: ListState::default(),
-                    })
-                    .list
-                    .push(planner);
-                acc
-            });
+    for planner in planners {
+        let date = planner.plannable_date.date_naive();
+        planner_map
+            .entry(date)
+            .or_insert(PlannerList {
+                list: Vec::new(),
+                state: ListState::default(),
+            })
+            .list
+            .push(planner);
+    }
 
-    Ok(Calendar { planners })
+    Ok(Calendar { planners: planner_map })
 }
