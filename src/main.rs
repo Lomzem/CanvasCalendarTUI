@@ -35,7 +35,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
     //         html_url: "https://canvas.example.com/courses/1/assignments/2".to_string(),
     //     },
     // ];
-
     // let planners: std::collections::BTreeMap<chrono::NaiveDate,types::PlannerList>  = planner
     //     .into_iter()
     //     .fold(std::collections::BTreeMap::new(), |mut acc, planner| {

@@ -12,7 +12,7 @@ export CANVAS_ACCESS_TOKEN="key-here"
 ```
 - Store the Base Canvas URL in the environment variable **CANVAS_URL** (for example add this to your .bashrc file):
 ```bash
-export CANVAS_URL="https://csuchico.canvas.edu"
+export CANVAS_URL="https://canvas.csuchico.edu"
 ``````
 
 ## Controls
