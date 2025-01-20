@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, fmt::Display};
+use std::{collections::BTreeMap, default, fmt::Display};
 
 use chrono::{DateTime, Local, NaiveDate};
 use ratatui::widgets::ListState;
@@ -49,4 +49,20 @@ impl Display for &CalendarItem {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(f, "{} - {}", self.get_course_code(), self.info.title)
     }
+}
+
+#[test]
+fn test_get_course_code() {
+    let item = CalendarItem {
+        course_name: "CSCI 440 - 01 Operating Systems Spring 2025".to_string(),
+        datetime: DateTime::default(),
+        course_id: 1,
+        info: CalendarItemInfo {
+            id: 1,
+            title: "dummy".to_string(),
+        },
+        html_url: "https://www.canvas.net".to_string(),
+    };
+
+    assert_eq!(item.get_course_code(), "CSCI 440");
 }
