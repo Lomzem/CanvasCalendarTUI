@@ -5,34 +5,35 @@ use ratatui::widgets::ListState;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Planner {
+pub struct CalendarItem {
     pub course_id: usize,
     #[serde(rename = "context_name")]
     pub course_name: String,
-    pub plannable_date: DateTime<Local>,
-    pub plannable: Plannable,
-    pub plannable_type: String,
+    #[serde(rename = "plannable_date")]
+    pub datetime: DateTime<Local>,
+    #[serde(rename = "plannable")]
+    pub info: CalendarItemInfo,
     pub html_url: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Plannable {
+pub struct CalendarItemInfo {
     pub id: usize,
     pub title: String,
 }
 
 #[derive(Debug)]
-pub struct PlannerList {
-    pub list: Vec<Planner>,
+pub struct Calendar {
+    pub date_map: BTreeMap<NaiveDate, DateItems>,
+}
+
+#[derive(Debug, Default)]
+pub struct DateItems {
+    pub items: Vec<CalendarItem>,
     pub state: ListState,
 }
 
-#[derive(Debug)]
-pub struct Calendar {
-    pub planners: BTreeMap<NaiveDate, PlannerList>,
-}
-
-impl Planner {
+impl CalendarItem {
     pub fn get_course_code(&self) -> String {
         // get first two splits of course name
         let course_name = self.course_name.split(' ').collect::<Vec<&str>>();
@@ -44,8 +45,8 @@ impl Planner {
     }
 }
 
-impl Display for &Planner {
+impl Display for &CalendarItem {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{} - {}", self.get_course_code(), self.plannable.title)
+        write!(f, "{} - {}", self.get_course_code(), self.info.title)
     }
 }

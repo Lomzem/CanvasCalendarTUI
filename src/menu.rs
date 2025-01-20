@@ -13,7 +13,7 @@ use ratatui::{
 
 use crate::{
     data_fetch::get_base_url,
-    types::{Calendar, PlannerList},
+    types::{Calendar, DateItems},
 };
 
 // just invert the bg and fg
@@ -31,13 +31,13 @@ impl Menu {
         let today = chrono::Local::now().naive_local().date();
 
         let current_date = if let Some((&closest_date, _)) = calendar
-            .planners
+            .date_map
             .range(today..) // Start with dates greater than or equal to today
             .next()
         {
             closest_date
         } else if let Some((&closest_date, _)) = calendar
-            .planners
+            .date_map
             .range(..today) // If no dates >= today, look for the latest date before today
             .next_back()
         {
@@ -115,13 +115,13 @@ impl Menu {
     fn render_list(&mut self, area: Rect, buf: &mut Buffer) {
         let items: Vec<_> = self
             .calendar
-            .planners
+            .date_map
             .get(&self.current_date)
-            .unwrap_or(&PlannerList {
-                list: Vec::new(),
+            .unwrap_or(&DateItems {
+                items: Vec::new(),
                 state: ListState::default(),
             })
-            .list
+            .items
             .iter()
             .map(|planner_item| Line::from(planner_item.to_string()))
             .collect();
@@ -129,7 +129,7 @@ impl Menu {
         if !items.is_empty() {
             let state = &mut self
                 .calendar
-                .planners
+                .date_map
                 .get_mut(&self.current_date)
                 .unwrap()
                 .state;
@@ -148,7 +148,7 @@ impl Menu {
             buf,
             &mut self
                 .calendar
-                .planners
+                .date_map
                 .get_mut(&self.current_date)
                 .unwrap()
                 .state,
@@ -191,7 +191,7 @@ impl Menu {
         // go to next date with planner item
         let next = self
             .calendar
-            .planners
+            .date_map
             .range(self.current_date.succ_opt().expect("Cant get next date")..)
             .next();
         if let Some((date, _)) = next {
@@ -202,7 +202,7 @@ impl Menu {
     fn prev_date(&mut self) {
         let prev = self
             .calendar
-            .planners
+            .date_map
             .range(..self.current_date.pred_opt().expect("Cant get prev date"))
             .next_back();
         if let Some((date, _)) = prev {
@@ -211,21 +211,21 @@ impl Menu {
     }
 
     fn down(&mut self) {
-        if let Some(planner_list) = self.calendar.planners.get_mut(&self.current_date) {
+        if let Some(planner_list) = self.calendar.date_map.get_mut(&self.current_date) {
             planner_list.state.select_next();
         }
     }
 
     fn up(&mut self) {
-        if let Some(planner_list) = self.calendar.planners.get_mut(&self.current_date) {
+        if let Some(planner_list) = self.calendar.date_map.get_mut(&self.current_date) {
             planner_list.state.select_previous();
         }
     }
 
     fn open_url(&self) {
-        if let Some(planner_list) = self.calendar.planners.get(&self.current_date) {
+        if let Some(planner_list) = self.calendar.date_map.get(&self.current_date) {
             if let Some(planner) = planner_list
-                .list
+                .items
                 .get(planner_list.state.selected().unwrap())
             {
                 let url = get_base_url()
