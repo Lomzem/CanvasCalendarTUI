@@ -1,4 +1,4 @@
-use std::{collections::BTreeMap, default, fmt::Display};
+use std::{collections::BTreeMap, fmt::Display};
 
 use chrono::{DateTime, Local, NaiveDate};
 use ratatui::widgets::ListState;
