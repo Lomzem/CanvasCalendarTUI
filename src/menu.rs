@@ -5,7 +5,7 @@ use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind};
 use ratatui::{
     buffer::Buffer,
     layout::{Constraint, Layout, Rect},
-    style::{Color, Style, Stylize},
+    style::{Color, Modifier, Style, Stylize},
     text::{Line, Span},
     widgets::{Block, HighlightSpacing, List, ListState, Paragraph, StatefulWidget, Widget},
     DefaultTerminal,
@@ -118,12 +118,18 @@ impl Menu {
             .date_map
             .get(&self.current_date)
             .unwrap_or(&DateItems {
-                items: Vec::new(),
-                state: ListState::default(),
+                ..Default::default()
             })
             .items
             .iter()
-            .map(|planner_item| Line::from(planner_item.to_string()))
+            // .map(|planner_item| Line::from(planner_item.to_string()))
+            .map(|planner_item| {
+                if planner_item.submissions.is_none() {
+                    Line::from(planner_item.to_string())
+                } else {
+                    Line::from(planner_item.to_string()).style(Modifier::CROSSED_OUT)
+                }
+            })
             .collect();
 
         if !items.is_empty() {
@@ -131,7 +137,7 @@ impl Menu {
                 .calendar
                 .date_map
                 .get_mut(&self.current_date)
-                .unwrap()
+                .expect("Struct must have state")
                 .state;
             if state.selected().is_none() {
                 state.select(Some(0));
