@@ -25,6 +25,7 @@ I based the controls on Vim bindings as a Neovim user. Here are the current supp
 - `q`: Quit the app
 
 ## Future Wanted Features
-- Make browser open feature more extensible
-- Different colors based on course or calendar event type
-- Strikethough on completed assignments
+- [ ] Make browser open feature more extensible
+- [ ] Different colors based on course or calendar event type
+- [ ] Allow for `<count><movement>` like `3j` to move 3 lines down
+- [x] Check mark on completed assignments
