@@ -5,9 +5,9 @@ use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind};
 use ratatui::{
     buffer::Buffer,
     layout::{Constraint, Layout, Rect},
-    style::{Color, Modifier, Style, Stylize},
+    style::{Color, Style, Stylize},
     text::{Line, Span},
-    widgets::{Block, HighlightSpacing, List, ListState, Paragraph, StatefulWidget, Widget},
+    widgets::{Block, HighlightSpacing, List, Paragraph, StatefulWidget, Widget},
     DefaultTerminal,
 };
 
@@ -124,10 +124,18 @@ impl Menu {
             .iter()
             // .map(|planner_item| Line::from(planner_item.to_string()))
             .map(|planner_item| {
-                if planner_item.submissions.is_none() {
+                if planner_item.submissions.is_none()
+                    || planner_item
+                        .submissions
+                        .as_ref()
+                        .is_some_and(|s| !s.submitted)
+                {
                     Line::from(planner_item.to_string())
                 } else {
-                    Line::from(planner_item.to_string()).style(Modifier::CROSSED_OUT)
+                    Line::from(vec![
+                        Span::from(planner_item.to_string()),
+                        Span::from(" ✔").green(),
+                    ])
                 }
             })
             .collect();
