@@ -218,7 +218,8 @@ impl Menu {
             .calendar
             .date_map
             .range(..self.current_date.pred_opt().expect("Cant get prev date"))
-            .next_back();
+            .rev()
+            .next();
         if let Some((date, _)) = prev {
             self.current_date = *date;
         }
