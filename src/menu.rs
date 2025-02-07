@@ -102,8 +102,11 @@ impl Widget for &mut Menu {
         ])
         .areas(block.inner(area));
 
-        Paragraph::new(format!("Current Date: {}", self.current_date))
-            .render(current_date_space, buf);
+        Paragraph::new(format!(
+            "Current Date: {}",
+            self.current_date.format("%A, %B%e, %Y")
+        ))
+        .render(current_date_space, buf);
 
         block.render(area, buf);
         self.render_list(list_space, buf);
