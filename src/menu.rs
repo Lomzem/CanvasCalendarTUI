@@ -104,7 +104,7 @@ impl Widget for &mut Menu {
 
         Paragraph::new(format!(
             "Current Date: {}",
-            self.current_date.format("%A, %B%e, %Y")
+            self.current_date.format("%A, %B %e, %Y")
         ))
         .render(current_date_space, buf);
 
